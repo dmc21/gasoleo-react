@@ -1,24 +1,17 @@
-import logo from './logo.svg';
 import './App.css';
+import Form from './components/Form/Form'
+import Navbar from './components/Navbar.js/Navbar';
+import Result from './components/Result/Result';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main className="d-flex flex-column gap-3">
+      <Navbar/>
+      <section className='container d-flex flex-column justify-content-center align-items-center gap-3'>
+        <Form/>
+        <Result/>
+      </section>
+    </main>
   );
 }
 
