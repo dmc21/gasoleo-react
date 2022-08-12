@@ -1,0 +1,27 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(1, 300px);
+    gap: 16px;
+    margin-bottom: 32pxs;
+}
+
+@media all and (min-width: 700px) {
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 300px);
+    }
+}
+
+@media all and (min-width: 992px) {
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 300px);
+    }
+}
+
+@media all and (min-width: 1240px) {
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 300px);
+    }
+}
