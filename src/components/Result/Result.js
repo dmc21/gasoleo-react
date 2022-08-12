@@ -4,20 +4,20 @@ import './Result.css';
 
 export default function Result(props) {
 
-    const { data, selectedOrderValue } = useContext(GasoleoContext);
+    const { dataToShare, selectedOrderValue } = useContext(GasoleoContext);
 
     useEffect(() => {
         console.log("Initialize Result Component")
-    }, [data])
+    }, [dataToShare])
 
 
 
     return (
         <>
-            <h1>Total: {data ? data.length : ''}</h1>
+            <h1>Total: {dataToShare ? dataToShare.length : ''}</h1>
 
             <section className="grid">
-                {data.map(el => {
+                {dataToShare.map(el => {
                     return (
                         <>
                             <article className="g-col-3 card">
@@ -28,7 +28,17 @@ export default function Result(props) {
 
                                     <article className="d-flex gap-2 align-items-center">
                                         <span className="m-0">Dirección:</span>
-                                        <h5>{el.Dirección}</h5>
+                                        <span>{el.Dirección}</span>
+                                    </article>
+
+                                    <article className="d-flex gap-2 align-items-center">
+                                        <span className="m-0">Gasolinera:</span>
+                                        <h5>{el.Rótulo}</h5>
+                                    </article>
+
+                                    <article className="d-flex gap-2 align-items-center">
+                                        <span className="m-0">Horario:</span>
+                                        <span>{JSON.stringify(el.Horario)}</span>
                                     </article>
 
                                     {selectedOrderValue === "0" ? <article className="d-flex gap-2 align-items-center">

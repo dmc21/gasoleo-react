@@ -5,23 +5,23 @@
     margin-bottom: 32pxs;
 }
 
-@media all and (min-width: 700px) {
+@media all and (min-width: 7500px) {
     .grid {
         display: grid;
-        grid-template-columns: repeat(2, 300px);
+        grid-template-columns: repeat(2, 350px);
     }
 }
 
-@media all and (min-width: 992px) {
+@media all and (min-width: 1024px) {
     .grid {
         display: grid;
-        grid-template-columns: repeat(3, 300px);
+        grid-template-columns: repeat(3, 350px);
     }
 }
 
-@media all and (min-width: 1240px) {
+@media all and (min-width: 1400px) {
     .grid {
         display: grid;
-        grid-template-columns: repeat(4, 300px);
+        grid-template-columns: repeat(4, 350px);
     }
 }

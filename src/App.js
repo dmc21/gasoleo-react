@@ -1,6 +1,6 @@
 import './App.css';
 import Form from './components/Form/Form'
-import Navbar from './components/Navbar.js/Navbar';
+import Navbar from './components/Navbar/Navbar';
 import Result from './components/Result/Result';
 
 function App() {
