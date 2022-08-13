@@ -1,3 +1,23 @@
+
+.box {
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    color: black;
+    border-radius: 10px;
+    background-color: beige;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;;
+}
+
+.box.selected {
+    border-radius: 2px solid black;
+    font-weight: bold;
+}
+
+
 .grid {
     display: grid;
     grid-template-columns: repeat(1, 300px);
