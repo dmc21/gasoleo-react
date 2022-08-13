@@ -22,33 +22,23 @@ export default function Result(props) {
     });
   }, [dataToShare]);
 
+  const updatePaginator = (index) => {
+    setPaginator((prevState) => ({
+      ...prevState,
+      actualPage: parseInt(index),
+    }));
+  };
+
   return (
     <>
       <h1>Total: {dataToShare ? dataToShare.length : ""}</h1>
 
-      
-      <section className="d-flex gap-2 flex-wrap justify-content-center">
-        {Array.apply(null, Array(paginator.pages)).map((el, index) => {
-          return (
-            <article
-              className={index === paginator.actualPage ? 'box selected' : 'box'}
-              key={index}
-              onClick={() =>
-                setPaginator((prevState) => ({
-                  ...prevState,
-                  actualPage: parseInt(index),
-                }))
-              }
-            >
-              <span>{parseInt(index + 1)}</span>
-            </article>
-          );
-        })}
-      </section>
-
       <section className="grid mb-3">
         {dataToShare
-          .slice(paginator.actualPage * paginator.limit, (paginator.actualPage + 1) * paginator.limit)
+          .slice(
+            paginator.actualPage * paginator.limit,
+            (paginator.actualPage + 1) * paginator.limit
+          )
           .map((el, index) => {
             return (
               <>
@@ -104,6 +94,20 @@ export default function Result(props) {
               </>
             );
           })}
+      </section>
+
+      <section className="d-flex gap-2 flex-wrap justify-content-center mb-4">
+        {Array.apply(null, Array(paginator.pages)).map((el, index) => {
+          return (
+            <article
+              className={index === paginator.actualPage ? "box selected" : "box"}
+              key={index}
+              onClick={() => updatePaginator(index)}
+            >
+              <span>{parseInt(index + 1)}</span>
+            </article>
+          );
+        })}
       </section>
     </>
   );

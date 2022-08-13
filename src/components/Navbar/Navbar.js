@@ -6,10 +6,14 @@ export default function Navbar(props) {
 
     const {sortAndFilterData} = useContext(GasoleoContext);
 
+    const handleChangeSort = (selectedSort) => {
+        sortAndFilterData(selectedSort)
+    }
+
     return (
         <>
             <nav className="d-flex justify-content-between p-3 bg-navbar">
-                <select onChange={(evt) => sortAndFilterData(evt.target.value)} className="form-control w-auto">
+                <select onChange={(evt) => handleChangeSort(evt.target.value)} className="form-control w-auto">
                     <option value="0">Gasoleo A</option>
                     <option value="1">Gasoleo Premium</option>
                     <option value="2">Gasolina 95</option>

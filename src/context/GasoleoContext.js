@@ -5,7 +5,7 @@ export const GasoleoContext = createContext();
 export function GasoleoContextProvider(props) {
   const [isGeoLocationActive, setGeolocationActive] = useState(false);
   const [data, setData] = useState([]);
-  const [dataToShare, setDataToShare] = useState([])
+  const [dataToShare, setDataToShare] = useState([]);
   const [codProv, setCodProv] = useState("04");
   const [selectedOrderValue, setselectedOrderValue] = useState("0");
 
@@ -23,8 +23,7 @@ export function GasoleoContextProvider(props) {
   const sortAndFilterData = (order, dataProp = null) => {
     let jsonData = dataProp || data;
 
-    if (dataProp)
-        setData(dataProp)
+    if (dataProp) setData(dataProp);
 
     setDataToShare(
       jsonData
@@ -32,7 +31,7 @@ export function GasoleoContextProvider(props) {
         .sort((a, b) => {
           return (
             parseFloat(a[arrayOrderStr[parseInt(order)]].replace(",", ".")) -
-            parseFloat(b["Precio Gasolina 95 E5 Premium"].replace(",", "."))
+            parseFloat(b[arrayOrderStr[parseInt(order)]].replace(",", "."))
           );
         })
     );
@@ -55,12 +54,11 @@ export function GasoleoContextProvider(props) {
       <GasoleoContext.Provider
         value={{
           isGeoLocationActive,
+          setGeolocationActive,
           dataToShare,
           codProv,
-          selectedOrderValue,
           setCodProv,
-          setGeolocationActive,
-          setselectedOrderValue,
+          selectedOrderValue,
           sortAndFilterData,
         }}
       >
