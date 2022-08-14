@@ -9,16 +9,16 @@ export default function Result(props) {
     total: 0,
     pages: 0,
     actualPage: 0,
-    limit: 10,
+    limit: 9,
   });
 
   useEffect(() => {
     console.log("Initialize Result Component");
     setPaginator({
       total: dataToShare.length,
-      pages: Math.ceil(dataToShare.length / 10),
+      pages: Math.ceil(dataToShare.length / 9),
       actualPage: 0,
-      limit: 10,
+      limit: 9,
     });
   }, [dataToShare]);
 
