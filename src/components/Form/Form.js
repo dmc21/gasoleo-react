@@ -11,8 +11,8 @@ export default function Form(props) {
         console.log("Initialize Form component")
     }, [])
 
-    const handleChange = (codProv) => {
-        setCodProv(codProv);
+    const handleChange = (evt) => {
+        setCodProv(evt.target.value);
     }
 
 
@@ -20,7 +20,7 @@ export default function Form(props) {
         <>
             <section>
                 <form>
-                    <select className="form-control w-auto" onChange={(evt) => handleChange(evt.target.value)}>
+                    <select className="form-control w-auto" onChange={handleChange}>
                       {provincias.map(prov => {
                           return (
                           <>
