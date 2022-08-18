@@ -1,12 +1,13 @@
+import React from "react";
 import { useContext } from "react"
 import { GasoleoContext } from "../../context/GasoleoContext"
 import './Navbar.css'
 
-export default function Navbar(props) {
+export default function Navbar() {
 
     const {sortAndFilterData} = useContext(GasoleoContext);
 
-    const handleChangeSort = (evt) => {
+    const handleChangeSort = (evt: { target: { value: any; }; }) => {
         sortAndFilterData(evt.target.value)
     }
 

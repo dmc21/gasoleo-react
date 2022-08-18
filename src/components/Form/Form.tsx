@@ -1,8 +1,9 @@
+import React from "react";
 import { useContext, useEffect } from "react";
 import { GasoleoContext } from "../../context/GasoleoContext";
 import { provincias } from "../../data/provincias";
 
-export default function Form(props) {
+export default function Form() {
 
 
     const {setCodProv} = useContext(GasoleoContext)
@@ -11,7 +12,7 @@ export default function Form(props) {
         console.log("Initialize Form component")
     }, [])
 
-    const handleChange = (evt) => {
+    const handleChange = (evt: { target: { value: string; }; }): void => {
         setCodProv(evt.target.value);
     }
 

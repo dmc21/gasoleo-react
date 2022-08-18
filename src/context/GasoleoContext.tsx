@@ -1,15 +1,23 @@
 import { createContext, useEffect, useState } from "react";
 
-export const GasoleoContext = createContext();
+export const GasoleoContext = createContext({
+  isGeoLocationActive: false,
+  setGeolocationActive : (bol: boolean): void => {},
+  dataToShare: [],
+  codProv: '04',
+  selectedOrderValue: "0",
+  setCodProv: (v: string): void => {},
+  sortAndFilterData: (order: string, dataProp?: any): void  => {}
+});
 
-export function GasoleoContextProvider(props) {
+export function GasoleoContextProvider(props: any) {
   const [isGeoLocationActive, setGeolocationActive] = useState(false);
   const [data, setData] = useState([]);
   const [dataToShare, setDataToShare] = useState([]);
   const [codProv, setCodProv] = useState("04");
   const [selectedOrderValue, setselectedOrderValue] = useState("0");
 
-  const arrayOrderStr = [
+  const arrayOrderStr: string [] = [
     "Precio Gasoleo A",
     "Precio Gasoleo Premium",
     "Precio Gasolina 95 E5",
@@ -20,7 +28,7 @@ export function GasoleoContextProvider(props) {
     findDataByProvince();
   }, [codProv]);
 
-  const sortAndFilterData = (order, dataProp = null) => {
+  const sortAndFilterData = (order: string, dataProp = null) => {
     let jsonData = dataProp || data;
 
     if (dataProp) setData(dataProp);
@@ -28,11 +36,10 @@ export function GasoleoContextProvider(props) {
     setDataToShare(
       jsonData
         .filter((el) => el[arrayOrderStr[parseInt(order)]] !== "")
-        .sort((a, b) => {
-          return (
-            parseFloat(a[arrayOrderStr[parseInt(order)]].replace(",", ".")) -
-            parseFloat(b[arrayOrderStr[parseInt(order)]].replace(",", "."))
-          );
+        .sort((a: any [], b: any []) => {
+          const number1 =  parseFloat((a[arrayOrderStr[0] as any]).replace(",", "."))
+          const number2 =  parseFloat((b[arrayOrderStr[0] as any]).replace(",", "."))
+          return number1 - number2
         })
     );
 

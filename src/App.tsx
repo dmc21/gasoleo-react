@@ -1,9 +1,10 @@
+import React from 'react';
 import './App.css';
 import Form from './components/Form/Form'
 import Navbar from './components/Navbar/Navbar';
 import Result from './components/Result/Result';
 
-function App() {
+export function App() {
   return (
     <main className="d-flex flex-column gap-3">
       <Navbar/>
@@ -14,5 +15,3 @@ function App() {
     </main>
   );
 }
-
-export default App;

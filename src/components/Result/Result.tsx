@@ -1,8 +1,9 @@
+import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { GasoleoContext } from "../../context/GasoleoContext";
 import "./Result.css";
 
-export default function Result(props) {
+export default function Result() {
   const { dataToShare, selectedOrderValue } = useContext(GasoleoContext);
 
   const [paginator, setPaginator] = useState({
@@ -22,10 +23,10 @@ export default function Result(props) {
     });
   }, [dataToShare]);
 
-  const updatePaginator = (index) => {
+  const updatePaginator = (index: number) => {
     setPaginator((prevState) => ({
       ...prevState,
-      actualPage: parseInt(index),
+      actualPage: index,
     }));
   };
 
@@ -39,7 +40,7 @@ export default function Result(props) {
             paginator.actualPage * paginator.limit,
             (paginator.actualPage + 1) * paginator.limit
           )
-          .map((el, index) => {
+          .map((el: any, index) => {
             return (
               <>
                 <article className="g-col-3 card" key={index}>
@@ -104,7 +105,7 @@ export default function Result(props) {
               key={index}
               onClick={() => updatePaginator(index)}
             >
-              <span>{parseInt(index + 1)}</span>
+              <span>{index + 1}</span>
             </article>
           );
         })}
