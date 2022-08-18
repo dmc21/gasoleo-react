@@ -1,4 +1,3 @@
-import React from "react";
 import { useContext } from "react"
 import { GasoleoContext } from "../../context/GasoleoContext"
 import './Navbar.css'

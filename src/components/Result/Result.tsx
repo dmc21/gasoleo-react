@@ -1,4 +1,3 @@
-import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { GasoleoContext } from "../../context/GasoleoContext";
 import "./Result.css";
@@ -14,7 +13,6 @@ export default function Result() {
   });
 
   useEffect(() => {
-    console.log("Initialize Result Component");
     setPaginator({
       total: dataToShare.length,
       pages: Math.ceil(dataToShare.length / 9),
