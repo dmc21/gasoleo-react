@@ -1,27 +1,20 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import { localidades } from "../data/localidades";
+import { Actions } from "./enums/GasoleoActions";
+import { gasoleoReducer } from "./GasoleoReducer";
+import { GasoleoState } from "./interfaces/GasoleoState";
 
 export const GasoleoContext = createContext({
-  isGeoLocationActive: false,
-  setGeolocationActive: (bol: boolean): void => {},
-  dataToShare: [],
-  codProv: "04",
-  codTown: "04",
-  selectedOrderValue: "0",
-  findDataByProvince: (v: string): void => {},
-  findDataByTown: (v: string): void => {},
-  sortAndFilterData: (order: string, dataProp?: any): void => {},
-  filteredTowns: [],
+  ...GasoleoState(),
+  findDataByProvince: (prov:string): void => {},
+  findDataByTown: (order: string, dataProp?: any): void => {},
+  sortAndFilterData: (town: string): void => {}
 });
 
 export function GasoleoContextProvider(props: any) {
-  const [isGeoLocationActive, setGeolocationActive] = useState(false);
-  const [data, setData] = useState([]);
-  const [dataToShare, setDataToShare] = useState([]);
-  const [codProv, setCodProv] = useState("04");
-  const [codTown, setCodTown] = useState("04");
-  const [filteredTowns, setFilteredTowns] = useState([]);
-  const [selectedOrderValue, setselectedOrderValue] = useState("0");
+  const [state, dispatch] = useReducer(gasoleoReducer, {
+    ...GasoleoState()
+  });
 
   const arrayOrderStr: string[] = [
     "Precio Gasoleo A",
@@ -35,13 +28,14 @@ export function GasoleoContextProvider(props: any) {
   }, []);
 
   const sortAndFilterData = (order: string, dataProp = null) => {
-    let jsonData = dataProp || data;
+    let jsonData = dataProp || state.data;
 
-    if (dataProp) setData(dataProp);
+    if (dataProp) dispatch({ type: Actions.UPDATE_DATA, payload: dataProp });
 
-    setDataToShare(
-      jsonData
-        .filter((el) => el[arrayOrderStr[parseInt(order)]] !== "")
+    dispatch({
+      type: Actions.UPDATE_DATA_TO_SHARE,
+      payload: jsonData
+        .filter((el: any) => el[arrayOrderStr[parseInt(order)]] !== "")
         .sort((a: any[], b: any[]) => {
           const number1 = parseFloat(
             a[arrayOrderStr[0] as any].replace(",", ".")
@@ -50,30 +44,31 @@ export function GasoleoContextProvider(props: any) {
             b[arrayOrderStr[0] as any].replace(",", ".")
           );
           return number1 - number2;
-        })
-    );
+        }),
+    });
 
-    setselectedOrderValue(order);
+    dispatch({ type: Actions.UPDATE_ORDER_VALUE, payload: order });
   };
 
   const findDataByTown = (town: string) => {
     if (town === "--") {
-      findDataByProvince(codProv);
-      setCodTown(town);
+      dispatch({ type: Actions.UPDATE_COD_PROV, payload: state.codProv });
+      dispatch({ type: Actions.UPDATE_COD_TOWN, payload: state.codTown });
       return;
     }
-    setCodTown(town);
+    dispatch({ type: Actions.UPDATE_COD_TOWN, payload: state.codTown });
     fetch(
       `https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroMunicipio/${town}`
     ).then((result) => {
       result.json().then((r) => {
-        sortAndFilterData(selectedOrderValue, r.ListaEESSPrecio);
+        sortAndFilterData(state.selectedOrderValue, r.ListaEESSPrecio);
       });
     });
   };
 
   const findDataByProvince = (prov: string) => {
-    setCodProv(prov);
+    dispatch({ type: Actions.UPDATE_COD_PROV, payload: prov });
+
     fetch(
       `https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroProvincia/${prov}`
     ).then((result) => {
@@ -86,8 +81,9 @@ export function GasoleoContextProvider(props: any) {
           })
           .filter((d: any) => d.IDProvincia.slice(0, 2) === prov);
 
-        setFilteredTowns(filteredAux as []);
-        sortAndFilterData(selectedOrderValue, r.ListaEESSPrecio);
+        dispatch({ type: Actions.UPDATE_FILTERED_TOWNS, payload: filteredAux });
+
+        sortAndFilterData(state.selectedOrderValue, r.ListaEESSPrecio);
       });
     });
   };
@@ -96,16 +92,10 @@ export function GasoleoContextProvider(props: any) {
     <>
       <GasoleoContext.Provider
         value={{
-          isGeoLocationActive,
-          setGeolocationActive,
-          dataToShare,
-          codProv,
-          codTown,
-          findDataByProvince,
+          ...state,
           findDataByTown,
-          selectedOrderValue,
-          sortAndFilterData,
-          filteredTowns,
+          findDataByProvince,
+          sortAndFilterData
         }}
       >
         {props.children}

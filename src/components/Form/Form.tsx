@@ -1,9 +1,8 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { GasoleoContext } from "../../context/GasoleoContext";
 import { provincias } from "../../data/provincias";
 
 export default function Form() {
-
 
     const {findDataByProvince, findDataByTown, filteredTowns, codTown} = useContext(GasoleoContext)
 
