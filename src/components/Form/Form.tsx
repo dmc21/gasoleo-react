@@ -20,21 +20,21 @@ export default function Form() {
             <section>
                 <form className="d-flex flex-column gap-3 justify-content-center align-items-center">
                     <select className="form-control w-auto" onChange={handleChangeProvince}>
-                      {provincias.map(prov => {
+                      {provincias.map((prov, index) => {
                           return (
                           <>
-                            <option key={prov.id} value={prov.id}>{prov.nm}</option>
+                            <option key={index} value={prov.id}>{prov.nm}</option>
                           </>
                           )
                       })}
                     </select>
 
-                    <select className="form-control w-auto" onChange={handleChangeTown}>
+                    <select defaultValue={codTown} className="form-control w-auto" onChange={handleChangeTown}>
                         <option value={'--'}>-- Selecciona localidad</option>
-                      {filteredTowns.map((town: any) => {
+                      {filteredTowns.map((town: any, index: number) => {
                           return (
                           <>
-                            <option selected={codTown === town.IDMunicipio} key={town.IDMunicipio} value={town.IDMunicipio}>{town.Municipio}</option>
+                            <option key={index} value={town.IDMunicipio}>{town.Municipio}</option>
                           </>
                           )
                       })}

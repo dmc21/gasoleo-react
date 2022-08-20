@@ -1,4 +1,5 @@
 import { createContext, useEffect, useReducer } from "react";
+import { FUEL_LIST } from "../constants/constants";
 import { localidades } from "../data/localidades";
 import { Actions } from "./enums/GasoleoActions";
 import { gasoleoReducer } from "./GasoleoReducer";
@@ -16,13 +17,6 @@ export function GasoleoContextProvider(props: any) {
     ...GasoleoState()
   });
 
-  const arrayOrderStr: string[] = [
-    "Precio Gasoleo A",
-    "Precio Gasoleo Premium",
-    "Precio Gasolina 95 E5",
-    "Precio Gasolina 95 E5 Premium",
-  ];
-
   useEffect(() => {
     findDataByProvince("04");
   }, []);
@@ -35,13 +29,13 @@ export function GasoleoContextProvider(props: any) {
     dispatch({
       type: Actions.UPDATE_DATA_TO_SHARE,
       payload: jsonData
-        .filter((el: any) => el[arrayOrderStr[parseInt(order)]] !== "")
+        .filter((el: any) => el[FUEL_LIST[parseInt(order)]] !== "")
         .sort((a: any[], b: any[]) => {
           const number1 = parseFloat(
-            a[arrayOrderStr[0] as any].replace(",", ".")
+            a[FUEL_LIST[0] as any].replace(",", ".")
           );
           const number2 = parseFloat(
-            b[arrayOrderStr[0] as any].replace(",", ".")
+            b[FUEL_LIST[0] as any].replace(",", ".")
           );
           return number1 - number2;
         }),
@@ -52,8 +46,8 @@ export function GasoleoContextProvider(props: any) {
 
   const findDataByTown = (town: string) => {
     if (town === "--") {
-      dispatch({ type: Actions.UPDATE_COD_PROV, payload: state.codProv });
-      dispatch({ type: Actions.UPDATE_COD_TOWN, payload: state.codTown });
+      findDataByProvince(state.codProv)
+      dispatch({ type: Actions.UPDATE_COD_TOWN, payload: town });
       return;
     }
     dispatch({ type: Actions.UPDATE_COD_TOWN, payload: state.codTown });
