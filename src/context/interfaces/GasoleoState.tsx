@@ -6,6 +6,7 @@ export interface GasoleoStateInterface {
     codTown: string,
     selectedOrderValue: string,
     filteredTowns: [],
+    loading: boolean
 }
 
 export const GasoleoState = (): GasoleoStateInterface => {
@@ -17,5 +18,6 @@ export const GasoleoState = (): GasoleoStateInterface => {
         codTown: "--",
         selectedOrderValue: "0",
         filteredTowns: [],
+        loading: false
     }
 }

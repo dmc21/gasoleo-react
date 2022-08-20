@@ -42,6 +42,7 @@ export function GasoleoContextProvider(props: any) {
     });
 
     dispatch({ type: Actions.UPDATE_ORDER_VALUE, payload: order });
+    dispatch({type: Actions.UPDATE_LOADING, payload: false})
   };
 
   const findDataByTown = (town: string) => {
@@ -51,6 +52,7 @@ export function GasoleoContextProvider(props: any) {
       return;
     }
     dispatch({ type: Actions.UPDATE_COD_TOWN, payload: state.codTown });
+    dispatch({type: Actions.UPDATE_LOADING, payload: true})
     fetch(
       `https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroMunicipio/${town}`
     ).then((result) => {
@@ -62,7 +64,7 @@ export function GasoleoContextProvider(props: any) {
 
   const findDataByProvince = (prov: string) => {
     dispatch({ type: Actions.UPDATE_COD_PROV, payload: prov });
-
+    dispatch({type: Actions.UPDATE_LOADING, payload: true})
     fetch(
       `https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroProvincia/${prov}`
     ).then((result) => {

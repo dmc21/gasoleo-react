@@ -3,7 +3,7 @@ import { GasoleoContext } from "../../context/GasoleoContext";
 import "./Result.css";
 
 export default function Result() {
-  const { dataToShare, selectedOrderValue } = useContext(GasoleoContext);
+  const { dataToShare, selectedOrderValue, loading } = useContext(GasoleoContext);
 
   const [paginator, setPaginator] = useState({
     total: 0,
@@ -27,6 +27,15 @@ export default function Result() {
       actualPage: index,
     }));
   };
+
+  console.log(loading)
+
+  if (loading)
+    return (
+      <section className="d-flex justify-content-center align-items-center">
+          <div className="lds-ripple"><div></div><div></div></div>
+      </section>
+    )
 
   return (
     <>

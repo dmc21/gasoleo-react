@@ -4,7 +4,7 @@ import { GasoleoStateInterface } from "./interfaces/GasoleoState";
 export const gasoleoReducer = (
   state: GasoleoStateInterface,
   action: { type: Actions; payload: any }
-) => {
+): GasoleoStateInterface => {
   switch (action.type) {
     case Actions.UPDATE_COD_PROV: {
       return {
@@ -44,6 +44,13 @@ export const gasoleoReducer = (
       return {
         ...state,
         selectedOrderValue: action.payload
+      }
+    }
+
+    case Actions.UPDATE_LOADING: {
+      return {
+        ...state,
+        loading: action.payload
       }
     }
 
