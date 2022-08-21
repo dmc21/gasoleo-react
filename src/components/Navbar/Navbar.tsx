@@ -5,7 +5,6 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import "./Navbar.css";
-import { start } from "repl";
 
 export default function Navbar() {
   const { sortAndFilterData, findBySpeechValue } = useContext(GasoleoContext);
@@ -24,11 +23,20 @@ export default function Navbar() {
   const commands = [
     {
       command: ["Gasolineras baratas en *", "Gasolineras en *"],
-      callback: (provincia: any) => {
-        stopListening()
-        setEnabledGasolineiThor(false)
-        findBySpeechValue(provincia)
-      }
+      callback: (text: string) => {
+        const split = text.split(" ");
+        let isCapital = false;
+        let provincia = text;
+
+        if (split.length > 1) {
+          provincia = split[0];
+          isCapital = split.some((word) => word === "capital");
+        }
+
+        stopListening();
+        setEnabledGasolineiThor(false);
+        findBySpeechValue(provincia, isCapital);
+      },
     },
 
     {

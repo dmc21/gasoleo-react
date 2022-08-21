@@ -11,7 +11,7 @@ export const GasoleoContext = createContext({
   findDataByProvince: (prov: string): void => {},
   findDataByTown: (order: string, dataProp?: any): void => {},
   sortAndFilterData: (town: string): void => {},
-  findBySpeechValue: (provStr: string): void => {},
+  findBySpeechValue: (provStr: string, isCapital: boolean): void => {},
 });
 
 export function GasoleoContextProvider(props: any) {
@@ -82,12 +82,11 @@ export function GasoleoContextProvider(props: any) {
     });
   };
 
-  const findBySpeechValue = (provStr: string) => {
-    console.log("Context value!", provStr);
+  const findBySpeechValue = (provStr: string, isCapital: boolean) => {
     const exactlyFind = localidades.find((d) => d.Municipio === provStr);
     if (exactlyFind) {
       const provCod = exactlyFind.IDProvincia;
-      const townCod = exactlyFind.IDMunicipio;
+      let townCod = exactlyFind.IDMunicipio;
 
       const filteredAux = localidades
         .filter((data: any) => {
@@ -98,6 +97,12 @@ export function GasoleoContextProvider(props: any) {
       dispatch({ type: Actions.UPDATE_FILTERED_TOWNS, payload: filteredAux });
 
       dispatch({ type: Actions.UPDATE_COD_PROV, payload: provCod });
+
+      if (exactlyFind.Municipio.toLowerCase() === exactlyFind.Provincia.toLowerCase() && !isCapital){
+        findDataByProvince(provCod)
+        return
+      }
+
       findDataByTown(townCod);
     }
   };
