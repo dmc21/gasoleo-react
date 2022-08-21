@@ -28,8 +28,6 @@ export default function Result() {
     }));
   };
 
-  console.log(loading)
-
   if (loading)
     return (
       <section className="d-flex justify-content-center align-items-center">
