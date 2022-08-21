@@ -29,7 +29,7 @@ export default function Navbar() {
         let provincia = text;
 
         if (split.length > 1) {
-          provincia = split[0];
+          provincia = split.filter(word => word !== 'capital').join(' ')
           isCapital = split.some((word) => word === "capital");
         }
 
