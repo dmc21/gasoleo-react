@@ -4,7 +4,7 @@ import { provincias } from "../../data/provincias";
 
 export default function Form() {
 
-    const {findDataByProvince, findDataByTown, filteredTowns, codTown} = useContext(GasoleoContext)
+    const {findDataByProvince, findDataByTown, filteredTowns, codTown, codProv} = useContext(GasoleoContext)
 
     const handleChangeProvince = (evt: { target: { value: string; }; }): void => {
         findDataByProvince(evt.target.value);
@@ -19,7 +19,7 @@ export default function Form() {
         <>
             <section>
                 <form className="d-flex flex-column gap-3 justify-content-center align-items-center">
-                    <select className="form-control w-auto" onChange={handleChangeProvince}>
+                    <select value={codProv} className="form-control w-auto" onChange={handleChangeProvince}>
                       {provincias.map((prov, index) => {
                           return (
                           <>
@@ -29,7 +29,7 @@ export default function Form() {
                       })}
                     </select>
 
-                    <select defaultValue={codTown} className="form-control w-auto" onChange={handleChangeTown}>
+                    <select value={codTown} className="form-control w-auto" onChange={handleChangeTown}>
                         <option value={'--'}>-- Selecciona localidad</option>
                       {filteredTowns.map((town: any, index: number) => {
                           return (
