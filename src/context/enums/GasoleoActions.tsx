@@ -8,5 +8,7 @@ export enum Actions {
     UPDATE_ORDER_VALUE,
     UPDATE_BY_PROVINCE,
     UPDATE_BY_TOWN,
-    UPDATE_LOADING
+    UPDATE_LOADING,
+
+    UPDATE_VIEW
 }

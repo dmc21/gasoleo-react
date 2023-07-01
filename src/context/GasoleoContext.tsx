@@ -5,6 +5,7 @@ import { provincias } from "../data/provincias";
 import { Actions } from "./enums/GasoleoActions";
 import { gasoleoReducer } from "./GasoleoReducer";
 import { GasoleoState } from "./interfaces/GasoleoState";
+import { GasoleoViews } from "./enums/GasoleoViews";
 
 export const GasoleoContext = createContext({
   ...GasoleoState(),
@@ -12,6 +13,7 @@ export const GasoleoContext = createContext({
   findDataByTown: (order: string, dataProp?: any): void => {},
   sortAndFilterData: (town: string): void => {},
   findBySpeechValue: (provStr: string, isCapital: boolean): void => {},
+  updateView: (view: GasoleoViews): void => {}
 });
 
 export function GasoleoContextProvider(props: any) {
@@ -20,7 +22,7 @@ export function GasoleoContextProvider(props: any) {
   });
 
   useEffect(() => {
-    findDataByProvince("04");
+    findDataByProvince("--");
   }, []);
 
   const sortAndFilterData = (order: string, dataProp = null) => {
@@ -63,8 +65,11 @@ export function GasoleoContextProvider(props: any) {
   const findDataByProvince = (prov: string) => {
     dispatch({ type: Actions.UPDATE_COD_PROV, payload: prov });
     dispatch({ type: Actions.UPDATE_LOADING, payload: true });
+
+    const path = prov !== '--' ? `/FiltroProvincia/${prov}` : ''
+
     fetch(
-      `https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroProvincia/${prov}`
+      `https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres${path}`
     ).then((result) => {
       result.json().then((r) => {
         const filteredAux = localidades
@@ -107,6 +112,10 @@ export function GasoleoContextProvider(props: any) {
     }
   };
 
+  const updateView = (view: GasoleoViews) => {
+      dispatch({type: Actions.UPDATE_VIEW, payload: view})
+  }
+
   return (
     <>
       <GasoleoContext.Provider
@@ -116,6 +125,7 @@ export function GasoleoContextProvider(props: any) {
           findDataByProvince,
           sortAndFilterData,
           findBySpeechValue,
+          updateView
         }}
       >
         {props.children}

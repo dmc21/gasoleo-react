@@ -54,6 +54,13 @@ export const gasoleoReducer = (
       }
     }
 
+    case Actions.UPDATE_VIEW: {
+      return {
+        ...state,
+        view: action.payload,
+      }
+    }
+
     default: {
       return {...state};
     }

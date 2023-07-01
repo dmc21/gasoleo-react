@@ -1,12 +1,16 @@
+import { GasoleoViews } from "../enums/GasoleoViews"
+import { InterfazDelEstado } from "./InterfazDelEstado"
+
 export interface GasoleoStateInterface {
     isGeoLocationActive: boolean,
-    dataToShare: [],
+    dataToShare: InterfazDelEstado[],
     data: [],
     codProv: string,
     codTown: string,
     selectedOrderValue: string,
     filteredTowns: [],
-    loading: boolean
+    loading: boolean,
+    view: GasoleoViews,
 }
 
 export const GasoleoState = (): GasoleoStateInterface => {
@@ -14,10 +18,11 @@ export const GasoleoState = (): GasoleoStateInterface => {
         isGeoLocationActive: false,
         dataToShare: [],
         data: [],
-        codProv: "04",
+        codProv: "--",
         codTown: "--",
         selectedOrderValue: "0",
         filteredTowns: [],
-        loading: false
+        loading: false,
+        view: GasoleoViews.LIST
     }
 }
