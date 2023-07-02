@@ -67,7 +67,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="d-flex justify-content-between p-3 bg-navbar">
+      <nav className="flex justify-content-between p-3 bg-navbar">
         <button
           className={
             enabledGasolineiThor
@@ -94,7 +94,7 @@ export default function Navbar() {
             );
           })}
         </select>
-        <section className="d-flex gap-1">
+        <section className="flex gap-1">
           <button className="btn btn-success">
             <i className="fa-solid fa-location-arrow"></i>
           </button>

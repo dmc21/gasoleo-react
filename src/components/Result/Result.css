@@ -1,48 +1,21 @@
-
-.box {
-    width: 25px;
-    height: 25px;
-    border: 1px solid black;
-    color: black;
-    border-radius: 10px;
-    background-color: beige;
+.paginator ul {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;;
-}
-
-.box.selected {
-    border-radius: 2px solid black;
-    font-weight: bold;
-}
-
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(1, 300px);
     gap: 16px;
-    font-size: 12px;
+    justify-content: center;
+    background-color: cadetblue;
+    padding: 8px;
 }
 
-@media all and (min-width: 750px) {
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(2, 350px);
-        font-size: 14px;
-    }
+.paginator ul li {
+    border: 1px solid white;
+    padding: 8px;
+    border-radius: 4px;
 }
 
-@media all and (min-width: 1024px) {
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(3, 350px);
-    }
+.paginator ul li.selected {
+    border: 2px solid white;
 }
 
-@media all and (min-width: 1400px) {
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(4, 350px);
-    }
+.paginator ul li {
+    border: 2px solid white;
 }

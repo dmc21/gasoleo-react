@@ -63,15 +63,15 @@ export default function ResultMap() {
 
   if (loading)
     return (
-      <section className="d-flex justify-content-center align-items-center">
+      <section className="flex justify-content-center align-items-center">
           <div className="lds-ripple"><div></div><div></div></div>
       </section>
     )
 
   return (
     <>
-    <section className="d-flex flex-column gap-2" style={{flex: '0 0 80vw'}}>
-      <section className="d-flex justify-content-between">
+    <section className="flex flex-col items-center gap-2" style={{flex: '0 0 80vw'}}>
+      <section className="flex justify-content-between">
         <h1>Total: {dataToShare ? dataToShare.length : ""}</h1>
       </section>
 

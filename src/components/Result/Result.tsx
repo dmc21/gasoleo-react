@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { GasoleoContext } from "../../context/GasoleoContext";
 import "./Result.css";
+import Pagination from 'react-js-pagination'
 
 export default function Result() {
   const { dataToShare, selectedOrderValue, loading } = useContext(GasoleoContext);
@@ -21,29 +22,31 @@ export default function Result() {
     });
   }, [dataToShare]);
 
-  const updatePaginator = (index: number) => {
-    setPaginator((prevState) => ({
+  const updatePaginator = (selected: number) => {
+
+
+  setPaginator((prevState) => ({
       ...prevState,
-      actualPage: index,
+      actualPage: selected,
     }));
   };
 
   if (loading)
     return (
-      <section className="d-flex justify-content-center align-items-center">
+      <section className="flex justify-center items-center">
           <div className="lds-ripple"><div></div><div></div></div>
       </section>
     )
 
   return (
     <>
-    <section className="d-flex flex-column gap-2">
-      <section className="d-flex justify-content-between">
+    <section className="flex flex-col gap-2">
+      <section className="flex justify-content-between">
         <h1>Total: {dataToShare ? dataToShare.length : ""}</h1>
       </section>
     
 
-<section className="grid mb-3">
+<section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-3">
   {dataToShare
     .slice(
       paginator.actualPage * paginator.limit,
@@ -52,51 +55,48 @@ export default function Result() {
     .map((el: any, index) => {
       return (
         <>
-          <article className="g-col-2 card" key={index}>
+          <article className="rounded-md w-[225px] flex flex-col gap-3 bg-hp-white border-2 shadow-2xl p-5" key={index}>
             <header className="card-header text-center">
-              <h4>{el.Localidad}</h4>
+              <h4 className="font-bold">{el.Localidad}</h4>
             </header>
-            <section className="card-body flex-column gap-2 justify-content-center align-items-center">
-              <article className="d-flex gap-2 align-items-center">
-                <span className="m-0">Dirección:</span>
-                <span>{el.Dirección}</span>
+            <section className="card-body flex h-full flex-col gap-2 justify-between items-center">
+
+              <div className="flex flex-col gap-2">
+              <article className="flex gap-2 items-center">
+                <span className="text-sm">{el.Dirección}</span>
               </article>
 
-              <article className="d-flex gap-2 align-items-center">
-                <span className="m-0">Gasolinera:</span>
-                <h5>{el.Rótulo}</h5>
+              <article className="flex gap-2 items-center">
+                <h5 className="text-sm">{el.Rótulo}</h5>
               </article>
 
-              <article className="d-flex gap-2 align-items-center">
-                <span className="m-0">Horario:</span>
-                <span>{el.Horario}</span>
+              <article className="flex gap-2 items-center">
+                <span className="text-sm">{el.Horario}</span>
               </article>
+              </div>
+             
 
               {selectedOrderValue === "0" ? (
-                <article className="d-flex gap-2 align-items-center">
-                  <span className="m-0">Gasoleo A:</span>
-                  <h5>{el["Precio Gasoleo A"]}€</h5>
+                <article className="flex flex-col justify-center gap-2 items-center">
+                  <h5 className="text-2xl">{el["Precio Gasoleo A"]}€</h5>
                 </article>
               ) : null}
 
               {selectedOrderValue === "1" ? (
-                <article className="d-flex gap-2 align-items-center">
-                  <span className="m-0">Gasoleo A Premium:</span>
-                  <h5>{el["Precio Gasoleo Premium"]}€</h5>
+                <article className="flex flex-col justify-center gap-2 items-center">
+                  <h5 className="text-2xl">{el["Precio Gasoleo Premium"]}€</h5>
                 </article>
               ) : null}
 
               {selectedOrderValue === "2" ? (
-                <article className="d-flex gap-2 align-items-center">
-                  <span className="m-0">Gasolina 95:</span>
-                  <h5>{el["Precio Gasolina 95 E5"]}€</h5>
+                <article className="flex flex-col justify-center gap-2 items-center">
+                  <h5 className="text-2xl">{el["Precio Gasolina 95 E5"]}€</h5>
                 </article>
               ) : null}
 
               {selectedOrderValue === "3" ? (
-                <article className="d-flex gap-2 align-items-center">
-                  <span className="m-0">Gasolina 95 Premium</span>
-                  <h5>{el["Precio Gasolina 95 E5 Premium"]}€</h5>
+                <article className="flex flex-col justify-center gap-2 items-center">
+                  <h5 className="text-2xl">{el["Precio Gasolina 95 E5 Premium"]}€</h5>
                 </article>
               ) : null}
             </section>
@@ -106,19 +106,16 @@ export default function Result() {
     })}
 </section>
 
-<section className="d-flex gap-2 flex-wrap justify-content-center mb-4">
-  {Array.apply(null, Array(paginator.pages)).map((el, index) => {
-    return (
-      <article
-        className={index === paginator.actualPage ? "box selected" : "box"}
-        key={index}
-        onClick={() => updatePaginator(index)}
-      >
-        <span>{index + 1}</span>
-      </article>
-    );
-  })}
+<section className="paginator mb-3">
+<Pagination
+          activePage={paginator.actualPage}
+          itemsCountPerPage={10}
+          totalItemsCount={paginator.total}
+          pageRangeDisplayed={5}
+          onChange={updatePaginator}
+        />
 </section>
+
     </section>
 
     </>
