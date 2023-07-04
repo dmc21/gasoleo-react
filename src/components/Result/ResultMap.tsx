@@ -70,7 +70,7 @@ export default function ResultMap() {
 
   return (
     <>
-    <section className="flex flex-col items-center gap-2" style={{flex: '0 0 80vw'}}>
+    <section className="flex flex-col items-center gap-2 w-full">
       <section className="flex justify-content-between">
         <h1>Total: {dataToShare ? dataToShare.length : ""}</h1>
       </section>

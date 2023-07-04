@@ -67,7 +67,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="flex justify-content-between p-3 bg-navbar">
+      <nav className="flex justify-between p-3 bg-navbar">
         <button
           className={
             enabledGasolineiThor

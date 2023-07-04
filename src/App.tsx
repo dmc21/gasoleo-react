@@ -15,7 +15,7 @@ export function App() {
   return (
     <main className="flex flex-col gap-3">
       <Navbar/>
-      <section className="container flex flex-col md:flex-row items-center md:items-start justify-center gap-3">
+      <section className="container self-center flex flex-col md:flex-row items-center md:items-start justify-center gap-3">
         <Form />
          {view === GasoleoViews.LIST ? <Result/> : <ResultMap/>}
       </section>
