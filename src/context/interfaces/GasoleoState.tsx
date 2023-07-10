@@ -18,7 +18,7 @@ export const GasoleoState = (): GasoleoStateInterface => {
         isGeoLocationActive: false,
         dataToShare: [],
         data: [],
-        codProv: "--",
+        codProv: "04",
         codTown: "--",
         selectedOrderValue: "0",
         filteredTowns: [],

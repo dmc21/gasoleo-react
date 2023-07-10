@@ -1,14 +1,14 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { GasoleoContext } from "../../context/GasoleoContext";
 import "./Result.css";
 import maplibregl, { GeoJSONSource } from 'maplibre-gl'; // or "const maplibregl = require('maplibre-gl');"
-import Map, {Layer, MapRef, Marker, NavigationControl, Source} from 'react-map-gl';
+import Map, {Layer, MapRef, NavigationControl, Source} from 'react-map-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { clusterLayer, clusterCountLayer, unclusteredPointLayer } from "./map/layers";
 import { FeatureCollection } from "./map/featureCollection";
 
 export default function ResultMap() {
-  const { dataToShare, selectedOrderValue, loading } = useContext(GasoleoContext);
+  const { dataToShare, loading } = useContext(GasoleoContext);
   const mapRef = useRef<MapRef>(null);
   const geojson: FeatureCollection = {
     type: 'FeatureCollection',
@@ -23,7 +23,7 @@ export default function ResultMap() {
 
   useEffect(() => {
 
-    dataToShare.map(el => {
+    dataToShare.forEach(el => {
       geojson.features.push(
         { 
         "type": "Feature", 
@@ -39,7 +39,7 @@ export default function ResultMap() {
       )
     })
 
-  }, [dataToShare]);
+  }, [dataToShare, geojson.features]);
 
 
   const onClick = (event: any) => {
@@ -78,9 +78,9 @@ export default function ResultMap() {
       <Map mapLib={maplibregl as any} 
         ref={mapRef}
         initialViewState={{
-          longitude: -3.713,
-          latitude: 40.2085,
-          zoom: 4
+          longitude: Number(dataToShare[0]["Longitud (WGS84)"].replace(',', ".")),
+          latitude:  Number(dataToShare[0]["Latitud"].replace(',', ".")),
+          zoom: 7
         }}
         interactiveLayerIds={[clusterLayer.id || '']}
         onClick={onClick}

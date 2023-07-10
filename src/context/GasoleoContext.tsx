@@ -22,7 +22,7 @@ export function GasoleoContextProvider(props: any) {
   });
 
   useEffect(() => {
-    findDataByProvince("--");
+    findDataByProvince("04");
   }, []);
 
   const sortAndFilterData = (order: string, dataProp = null) => {
