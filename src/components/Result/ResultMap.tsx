@@ -85,7 +85,7 @@ export default function ResultMap() {
         interactiveLayerIds={[clusterLayer.id || '']}
         onClick={onClick}
         style={{width: "100%", height: " calc(100vh - 170px)"}}
-        mapStyle="https://api.maptiler.com/maps/basic-v2/style.json?key=UgUlr4edjFU7NcebSHgN"
+        mapStyle="https://api.maptiler.com/maps/basic-v2/style.json?key=77YLDKU7Iqg8PoYLofKX"
       >
 
         <Source
