@@ -2,20 +2,24 @@
     display: flex;
     gap: 16px;
     justify-content: center;
-    background-color: cadetblue;
-    padding: 8px;
+    background-color: rgba(245, 245, 220, .9);
+    padding: 16px 32px;
+    border-radius: 10px;
+}
+
+
+.paginator ul li.active {
+    font-weight: bold;
+    background-color: rgb(34, 67, 68);
+    color: white;
+
 }
 
 .paginator ul li {
-    border: 1px solid white;
+    border: 2px solid black;
+    width: 37.8px;
+    text-align: center;
+    background-color: rgba(34, 67, 68, .5);
     padding: 8px;
-    border-radius: 4px;
-}
-
-.paginator ul li.selected {
-    border: 2px solid white;
-}
-
-.paginator ul li {
-    border: 2px solid white;
+    border-radius: 10px;
 }

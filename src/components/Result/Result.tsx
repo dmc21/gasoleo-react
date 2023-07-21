@@ -2,9 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import { GasoleoContext } from "../../context/GasoleoContext";
 import "./Result.css";
 import Pagination from 'react-js-pagination'
+import { useMediaQuery } from "react-responsive";
 
 export default function Result() {
   const { dataToShare, selectedOrderValue, loading } = useContext(GasoleoContext);
+
+  const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
+
 
   const [paginator, setPaginator] = useState({
     total: 0,
@@ -12,6 +16,8 @@ export default function Result() {
     actualPage: 0,
     limit: 9,
   });
+
+
 
   useEffect(() => {
     setPaginator({
@@ -46,7 +52,17 @@ export default function Result() {
       </section>
     
 
-<section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-3">
+      <section className="paginator mb-3">
+<Pagination
+          activePage={paginator.actualPage}
+          itemsCountPerPage={10}
+          totalItemsCount={paginator.total}
+          pageRangeDisplayed={isMobile ? 1 : 5}
+          onChange={updatePaginator}
+        />
+</section>
+
+<section className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
   {dataToShare
     .slice(
       paginator.actualPage * paginator.limit,
@@ -55,7 +71,7 @@ export default function Result() {
     .map((el: any, index) => {
       return (
         <>
-          <article className="rounded-md w-[225px] flex flex-col gap-3 bg-hp-white border-2 shadow-2xl p-5" key={index}>
+          <article className="rounded-md w-[250px] flex flex-col gap-3 bg-hp-white border-2 shadow-2xl p-5" key={index}>
             <header className="card-header text-center">
               <h4 className="font-bold">{el.Localidad}</h4>
             </header>
@@ -106,15 +122,7 @@ export default function Result() {
     })}
 </section>
 
-<section className="paginator mb-3">
-<Pagination
-          activePage={paginator.actualPage}
-          itemsCountPerPage={10}
-          totalItemsCount={paginator.total}
-          pageRangeDisplayed={5}
-          onChange={updatePaginator}
-        />
-</section>
+
 
     </section>
 
