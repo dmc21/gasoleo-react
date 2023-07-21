@@ -1,14 +1,19 @@
 import { useContext, useEffect, useRef } from "react";
 import { GasoleoContext } from "../../context/GasoleoContext";
 import "./Result.css";
-import maplibregl, { GeoJSONSource } from 'maplibre-gl'; // or "const maplibregl = require('maplibre-gl');"
+import maplibregl, { GeoJSONSource, ImageSource } from 'maplibre-gl'; // or "const maplibregl = require('maplibre-gl');"
 import Map, {Layer, MapRef, NavigationControl, Source} from 'react-map-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { clusterLayer, clusterCountLayer, unclusteredPointLayer } from "./map/layers";
 import { FeatureCollection } from "./map/featureCollection";
 
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
+import image from '../../images/gasoleo_resize.png';
+
 export default function ResultMap() {
-  const { dataToShare, loading } = useContext(GasoleoContext);
+  const { dataToShare, loading, selectedOrderValue, toggleLoading } = useContext(GasoleoContext);
   const mapRef = useRef<MapRef>(null);
   const geojson: FeatureCollection = {
     type: 'FeatureCollection',
@@ -23,13 +28,15 @@ export default function ResultMap() {
 
   useEffect(() => {
 
+    const str = Number(selectedOrderValue) === 0 ? 'Precio Gasoleo A' : Number(selectedOrderValue) === 1 ? 'Precio Gasoleo Premium' : Number(selectedOrderValue) === 2 ? 'Precio Gasolina 95 E5' : 'Precio Gasolina 95 E5 Premium'
+
     dataToShare.forEach(el => {
       geojson.features.push(
         { 
         "type": "Feature", 
         "properties": { 
           "id": el.Dirección, 
-          "price": el["Precio Gasoleo A"], 
+          "price": el[str], 
         },
          "geometry": { 
           "type": "Point", 
@@ -39,7 +46,8 @@ export default function ResultMap() {
       )
     })
 
-  }, [dataToShare, geojson.features]);
+
+  }, [dataToShare, geojson.features, selectedOrderValue]);
 
 
   const onClick = (event: any) => {
@@ -61,10 +69,20 @@ export default function ResultMap() {
     });
   };
 
+  const onMapLoad = () => {
+    mapRef.current?.loadImage(
+      image,
+      (error, image) => {
+      if (error) throw error;
+      console.log('adding image')
+      mapRef.current?.addImage('custom-marker', image as any);
+      })
+  }
+
   if (loading)
     return (
-      <section className="flex justify-content-center align-items-center">
-          <div className="lds-ripple"><div></div><div></div></div>
+      <section className="flex justify-content-center align-items-center w-full">
+          <Skeleton width={'100%'} height={'calc(100vh - 170px)'} count={1}></Skeleton>
       </section>
     )
 
@@ -84,8 +102,9 @@ export default function ResultMap() {
         }}
         interactiveLayerIds={[clusterLayer.id || '']}
         onClick={onClick}
+        onLoad={onMapLoad}
         style={{width: "100%", height: " calc(100vh - 170px)"}}
-        mapStyle="https://api.maptiler.com/maps/basic-v2/style.json?key=77YLDKU7Iqg8PoYLofKX"
+        mapStyle="https://api.maptiler.com/maps/basic-v2/style.json?key=UgUlr4edjFU7NcebSHgN"
       >
 
         <Source

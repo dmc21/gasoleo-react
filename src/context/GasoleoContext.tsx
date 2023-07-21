@@ -13,7 +13,8 @@ export const GasoleoContext = createContext({
   findDataByTown: (order: string, dataProp?: any): void => {},
   sortAndFilterData: (town: string): void => {},
   findBySpeechValue: (provStr: string, isCapital: boolean): void => {},
-  updateView: (view: GasoleoViews): void => {}
+  updateView: (view: GasoleoViews): void => {},
+  toggleLoading: (loading: boolean): void => {}
 });
 
 export function GasoleoContextProvider(props: any) {
@@ -25,7 +26,12 @@ export function GasoleoContextProvider(props: any) {
     findDataByProvince("04");
   }, []);
 
+  const toggleLoading = (loading: boolean) => {
+    dispatch({ type: Actions.UPDATE_LOADING, payload: loading }); 
+  }
+
   const sortAndFilterData = (order: string, dataProp = null) => {
+
     let jsonData = dataProp || state.data;
 
     if (dataProp) dispatch({ type: Actions.UPDATE_DATA, payload: dataProp });
@@ -125,7 +131,8 @@ export function GasoleoContextProvider(props: any) {
           findDataByProvince,
           sortAndFilterData,
           findBySpeechValue,
-          updateView
+          updateView,
+          toggleLoading
         }}
       >
         {props.children}

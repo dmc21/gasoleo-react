@@ -3,6 +3,7 @@ import { GasoleoContext } from "../../context/GasoleoContext";
 import "./Result.css";
 import Pagination from 'react-js-pagination'
 import { useMediaQuery } from "react-responsive";
+import Skeleton from "react-loading-skeleton";
 
 export default function Result() {
   const { dataToShare, selectedOrderValue, loading } = useContext(GasoleoContext);
@@ -39,8 +40,14 @@ export default function Result() {
 
   if (loading)
     return (
-      <section className="flex justify-center items-center">
-          <div className="lds-ripple"><div></div><div></div></div>
+      <section className="flex flex-col gap-3 justify-center items-center">
+          <Skeleton width={60} height={24} count={1}></Skeleton>
+          <Skeleton width={532} height={60} count={1}></Skeleton>
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+            {[0,1,2,3,4,5,6,7,8].map(n => {
+              return <Skeleton width={250} height={250} count={1}></Skeleton>
+            })}
+          </section>
       </section>
     )
 

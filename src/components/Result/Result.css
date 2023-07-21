@@ -23,3 +23,10 @@
     padding: 8px;
     border-radius: 10px;
 }
+
+span[aria-live=polite] {
+    width: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

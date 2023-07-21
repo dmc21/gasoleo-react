@@ -25,13 +25,17 @@ export const clusterCountLayer: LayerProps = {
 
 export const unclusteredPointLayer: LayerProps = {
   id: 'unclustered-point',
-  type: 'circle',
+  type: 'symbol',
   source: 'earthquakes',
   filter: ['!', ['has', 'point_count']],
-  paint: {
-    'circle-color': '#11b4da',
-    'circle-radius': 4,
-    'circle-stroke-width': 1,
-    'circle-stroke-color': '#fff'
+  layout: {
+    'icon-image': 'custom-marker',
+    'text-field': ['get', 'price'],
+    'text-font': [
+    'Open Sans Semibold',
+    'Arial Unicode MS Bold'
+    ],
+    'text-offset': [0, 1.25],
+    'text-anchor': 'top'
   }
 };

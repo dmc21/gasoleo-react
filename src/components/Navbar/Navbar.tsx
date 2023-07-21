@@ -7,7 +7,7 @@ import SpeechRecognition, {
 import "./Navbar.css";
 
 export default function Navbar() {
-  const { sortAndFilterData, findBySpeechValue } = useContext(GasoleoContext);
+  const { sortAndFilterData, findBySpeechValue, toggleLoading } = useContext(GasoleoContext);
 
   const startListening = () =>
     SpeechRecognition.startListening({ continuous: true });
@@ -15,7 +15,12 @@ export default function Navbar() {
   const stopListening = () => SpeechRecognition.stopListening();
 
   const handleChangeSort = (evt: { target: { value: any } }) => {
-    sortAndFilterData(evt.target.value);
+    toggleLoading(true)
+    
+    setTimeout(() => {
+      sortAndFilterData(evt.target.value);
+    },500)
+    
   };
 
   const [enabledGasolineiThor, setEnabledGasolineiThor] = useState(false);
