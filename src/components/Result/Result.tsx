@@ -40,7 +40,7 @@ export default function Result() {
 
   return (
     <>
-    <section className="flex flex-col gap-2">
+    <section className="flex flex-col gap-2 items-center">
       <section className="flex justify-content-between">
         <h1>Total: {dataToShare ? dataToShare.length : ""}</h1>
       </section>
