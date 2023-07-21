@@ -53,7 +53,7 @@ export default function Result() {
 
   return (
     <>
-    <section className="flex flex-col gap-2 items-center">
+    <section className="flex flex-col gap-2 items-center flex-1">
       <section className="flex justify-content-between">
         <h1>Total: {dataToShare ? dataToShare.length : ""}</h1>
       </section>
@@ -69,7 +69,7 @@ export default function Result() {
         />
 </section>
 
-<section className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+<section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-3">
   {dataToShare
     .slice(
       paginator.actualPage * paginator.limit,

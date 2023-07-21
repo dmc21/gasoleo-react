@@ -82,7 +82,7 @@ export default function ResultMap() {
   if (loading)
     return (
       <section className="flex justify-content-center align-items-center w-full">
-          <Skeleton width={'100%'} height={'calc(100vh - 170px)'} count={1}></Skeleton>
+          <Skeleton width={'100%'} height={'calc(100vh - 108px)'} count={1}></Skeleton>
       </section>
     )
 
@@ -103,7 +103,7 @@ export default function ResultMap() {
         interactiveLayerIds={[clusterLayer.id || '']}
         onClick={onClick}
         onLoad={onMapLoad}
-        style={{width: "100%", height: " calc(100vh - 170px)"}}
+        style={{width: "100%", height: " calc(100vh - 108px)"}}
         mapStyle="https://api.maptiler.com/maps/basic-v2/style.json?key=UgUlr4edjFU7NcebSHgN"
       >
 
