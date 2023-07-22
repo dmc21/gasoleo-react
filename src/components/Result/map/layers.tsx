@@ -29,7 +29,8 @@ export const unclusteredPointLayer: LayerProps = {
   source: 'earthquakes',
   filter: ['!', ['has', 'point_count']],
   layout: {
-    'icon-image': 'custom-marker',
+    'icon-image': '{brand}',
+    "icon-size": .25,
     'text-field': ['get', 'price'],
     'text-font': [
     'Open Sans Semibold',

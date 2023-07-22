@@ -10,10 +10,10 @@ import { FeatureCollection } from "./map/featureCollection";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-import image from '../../images/gasoleo_resize.png';
-
 export default function ResultMap() {
-  const { dataToShare, loading, selectedOrderValue, toggleLoading } = useContext(GasoleoContext);
+  const { dataToShare, loading, selectedOrderValue } = useContext(GasoleoContext);
+  const validRefs = ['CEPSA', 'REPSOL', 'SHELL',
+  'BP', 'PLENOIL', 'TOTAL', 'GALP', 'ALCAMPO', 'PETROPRIX']
   const mapRef = useRef<MapRef>(null);
   const geojson: FeatureCollection = {
     type: 'FeatureCollection',
@@ -37,6 +37,7 @@ export default function ResultMap() {
         "properties": { 
           "id": el.Dirección, 
           "price": el[str], 
+          "brand": getKeys(el.Rótulo)
         },
          "geometry": { 
           "type": "Point", 
@@ -48,6 +49,17 @@ export default function ResultMap() {
 
 
   }, [dataToShare, geojson.features, selectedOrderValue]);
+
+  const getKeys = (ref:string) => {
+
+    if (validRefs.map(d => ref.includes(d)).some(d => d)) {
+      let r = validRefs.find(d => ref.includes(d))
+      return r
+    }
+
+    return 'marca-blanca'
+
+  }
 
 
   const onClick = (event: any) => {
@@ -70,12 +82,21 @@ export default function ResultMap() {
   };
 
   const onMapLoad = () => {
+
+    validRefs.forEach(r => {
+      loadImage(r)
+    })
+
+    loadImage('marca-blanca')
+   
+  }
+
+  const loadImage = (r: string) => {
     mapRef.current?.loadImage(
-      image,
+      `../images/${r}.png`,
       (error, image) => {
       if (error) throw error;
-      console.log('adding image')
-      mapRef.current?.addImage('custom-marker', image as any);
+      mapRef.current?.addImage(r, image as any);
       })
   }
 

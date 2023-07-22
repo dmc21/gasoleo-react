@@ -38,6 +38,20 @@ export default function Result() {
     }));
   };
 
+  const getSrc = (ref:string) => {
+
+    const validRefs = ['CEPSA', 'REPSOL', 'SHELL',
+      'BP', 'PLENOIL', 'TOTAL', 'GALP', 'ALCAMPO', 'PETROPRIX']
+
+    if (validRefs.map(d => ref.includes(d)).some(d => d)) {
+      let r = validRefs.find(d => ref.includes(d))
+      return `../images/${r}.png`
+    }
+
+    return '../images/marca-blanca.png'
+
+  }
+
   if (loading)
     return (
       <section className="flex flex-col gap-3 justify-center items-center">
@@ -79,7 +93,8 @@ export default function Result() {
       return (
         <>
           <article className="rounded-md w-[250px] flex flex-col gap-3 bg-hp-white border-2 shadow-2xl p-5" key={index}>
-            <header className="card-header text-center">
+            <header className="card-header flex flex-col gap-2 text-center items-center">
+              <img src={getSrc(el['Rótulo'])} alt={el['Rótulo']} width={36} height={36} />
               <h4 className="font-bold">{el.Localidad}</h4>
             </header>
             <section className="card-body flex h-full flex-col gap-2 justify-between items-center">
