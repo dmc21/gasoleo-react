@@ -36,8 +36,8 @@ export default function ResultMap() {
         "type": "Feature", 
         "properties": { 
           "id": el.Dirección, 
-          "price": el[str], 
-          "brand": getKeys(el.Rótulo)
+          "price": `${el.Rótulo}\n${el[str]}`, 
+          "brand": getKeys(el.Rótulo),
         },
          "geometry": { 
           "type": "Point", 
