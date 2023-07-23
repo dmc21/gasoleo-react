@@ -108,7 +108,7 @@ export default function ResultMap() {
   }
 
   const getMapCss = () => {
-   return  isMobile ? 'calc(100vh - 318px)' : 'calc(100vh - 108px)'
+   return  isMobile ? 'calc(100vh - 263px)' : 'calc(100vh - 108px)'
   }
 
   const loadImage = (r: string) => {

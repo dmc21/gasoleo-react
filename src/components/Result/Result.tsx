@@ -4,11 +4,16 @@ import "./Result.css";
 import Pagination from 'react-js-pagination'
 import { useMediaQuery } from "react-responsive";
 import Skeleton from "react-loading-skeleton";
+import { InterfazDelEstado } from "../../context/interfaces/InterfazDelEstado";
 
 export default function Result() {
   const { dataToShare, selectedOrderValue, loading } = useContext(GasoleoContext);
 
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
+
+  const googleMapUrl = (lat: number, long: number) => {
+    return `https://www.google.com/maps/search/?api=1&query=${lat}%2C${long}`
+  }
 
 
   const [paginator, setPaginator] = useState({
@@ -90,7 +95,7 @@ export default function Result() {
       (paginator.actualPage * paginator.limit) - paginator.limit,
       (paginator.actualPage) * paginator.limit
     )
-    .map((el: any, index) => {
+    .map((el: InterfazDelEstado, index) => {
       return (
         <>
           <article className="rounded-md w-[250px] flex flex-col gap-3 bg-hp-white border-2 shadow-2xl p-5" key={index}>
@@ -102,7 +107,7 @@ export default function Result() {
 
               <div className="flex flex-col gap-2">
               <article className="flex gap-2 items-center">
-                <span className="text-sm">{el.Dirección}</span>
+                <a target="_blank" rel="noreferrer" href={googleMapUrl(Number(el.Latitud.replace(",", ".")), Number(el['Longitud (WGS84)'].replace(",", ".")))} className="text-sm">{el.Dirección}</a>
               </article>
 
               <article className="flex gap-2 items-center">
