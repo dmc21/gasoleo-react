@@ -1,8 +1,8 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { GasoleoContext } from "../../context/GasoleoContext";
 import "./Result.css";
 import maplibregl, { GeoJSONSource, ImageSource } from 'maplibre-gl'; // or "const maplibregl = require('maplibre-gl');"
-import Map, {Layer, MapRef, NavigationControl, Source} from 'react-map-gl';
+import Map, {Layer, MapRef, NavigationControl, Popup, Source} from 'react-map-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { clusterLayer, clusterCountLayer, unclusteredPointLayer } from "./map/layers";
 import { FeatureCollection } from "./map/featureCollection";
@@ -12,6 +12,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 export default function ResultMap() {
   const { dataToShare, loading, selectedOrderValue } = useContext(GasoleoContext);
+
   const validRefs = ['CEPSA', 'REPSOL', 'SHELL',
   'BP', 'PLENOIL', 'TOTAL', 'GALP', 'ALCAMPO', 'PETROPRIX']
   const mapRef = useRef<MapRef>(null);
@@ -63,22 +64,25 @@ export default function ResultMap() {
 
 
   const onClick = (event: any) => {
-    const feature = event.features[0];
-    const clusterId = feature.properties.cluster_id;
-
-    const mapboxSource = mapRef?.current?.getSource('earthquakes') as GeoJSONSource;
-
-    mapboxSource.getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
-      if (err) {
-        return;
-      }
-
-      mapRef?.current?.easeTo({
-        center: feature.geometry.coordinates,
-        zoom,
-        duration: 500
+    if (event.features.length > 0) {
+      const feature = event.features[0];
+      const clusterId = feature.properties.cluster_id;
+  
+      const mapboxSource = mapRef?.current?.getSource('earthquakes') as GeoJSONSource;
+  
+      mapboxSource.getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
+        if (err) {
+          return;
+        }
+  
+        mapRef?.current?.easeTo({
+          center: feature.geometry.coordinates,
+          zoom,
+          duration: 500
+        });
       });
-    });
+    }
+
   };
 
   const onMapLoad = () => {
@@ -88,6 +92,15 @@ export default function ResultMap() {
     })
 
     loadImage('marca-blanca')
+
+    mapRef.current?.on('click', 'unclustered-point', (event) => {
+
+      if (event.features) {
+        const asset = dataToShare.find(g => g.Dirección === (event.features?.at(0) as any).properties.id)
+        console.log(asset)
+      }
+     
+    })
    
   }
 
@@ -139,7 +152,9 @@ export default function ResultMap() {
           <Layer {...clusterLayer} />
           <Layer {...clusterCountLayer} />
           <Layer {...unclusteredPointLayer} />
-        </Source>
+         
+
+          </Source>
 
         <NavigationControl position="top-left" />
       </Map>
