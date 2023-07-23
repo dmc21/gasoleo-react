@@ -26,7 +26,7 @@ export default function Form() {
 
     return (
         <>
-            <section className="p-5 flex flex-col gap-3">
+            <section className="p-5 flex flex-col gap-3 w-full md:w-auto">
                 <article className="flex w-full">
                     <button className="w-full rounded-md p-3 bg-slate-400 text-white" onClick={handleLoadView}>{view === GasoleoViews.LIST ? 'Ver mapa' : 'Ver lista'}</button>
                 </article>

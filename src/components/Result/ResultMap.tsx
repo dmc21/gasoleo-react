@@ -9,9 +9,12 @@ import { FeatureCollection } from "./map/featureCollection";
 
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { useMediaQuery } from "react-responsive";
 
 export default function ResultMap() {
   const { dataToShare, loading, selectedOrderValue } = useContext(GasoleoContext);
+
+  const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
   const validRefs = ['CEPSA', 'REPSOL', 'SHELL',
   'BP', 'PLENOIL', 'TOTAL', 'GALP', 'ALCAMPO', 'PETROPRIX']
@@ -104,6 +107,10 @@ export default function ResultMap() {
    
   }
 
+  const getMapCss = () => {
+   return  isMobile ? 'calc(100vh - 318px)' : 'calc(100vh - 108px)'
+  }
+
   const loadImage = (r: string) => {
     mapRef.current?.loadImage(
       `../images/${r}.png`,
@@ -116,7 +123,7 @@ export default function ResultMap() {
   if (loading)
     return (
       <section className="flex justify-content-center align-items-center w-full">
-          <Skeleton width={'100%'} height={'calc(100vh - 108px)'} count={1}></Skeleton>
+          <Skeleton width={'100%'} height={getMapCss()} count={1}></Skeleton>
       </section>
     )
 
@@ -137,7 +144,7 @@ export default function ResultMap() {
         interactiveLayerIds={[clusterLayer.id || '']}
         onClick={onClick}
         onLoad={onMapLoad}
-        style={{width: "100%", height: " calc(100vh - 108px)"}}
+        style={{width: "100%", height: getMapCss()}}
         mapStyle="https://api.maptiler.com/maps/basic-v2/style.json?key=UgUlr4edjFU7NcebSHgN"
       >
 
