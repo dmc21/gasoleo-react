@@ -14,7 +14,7 @@ export default function Result() {
   const [paginator, setPaginator] = useState({
     total: 0,
     pages: 0,
-    actualPage: 0,
+    actualPage: 1,
     limit: 9,
   });
 
@@ -24,13 +24,14 @@ export default function Result() {
     setPaginator({
       total: dataToShare.length,
       pages: Math.ceil(dataToShare.length / 9),
-      actualPage: 0,
+      actualPage: 1,
       limit: 9,
     });
   }, [dataToShare]);
 
   const updatePaginator = (selected: number) => {
 
+    console.log(selected)
 
   setPaginator((prevState) => ({
       ...prevState,
@@ -86,8 +87,8 @@ export default function Result() {
 <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-3">
   {dataToShare
     .slice(
-      paginator.actualPage * paginator.limit,
-      (paginator.actualPage + 1) * paginator.limit
+      (paginator.actualPage * paginator.limit) - paginator.limit,
+      (paginator.actualPage) * paginator.limit
     )
     .map((el: any, index) => {
       return (
