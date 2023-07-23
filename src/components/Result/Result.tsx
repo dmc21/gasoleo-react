@@ -5,6 +5,7 @@ import Pagination from 'react-js-pagination'
 import { useMediaQuery } from "react-responsive";
 import Skeleton from "react-loading-skeleton";
 import { InterfazDelEstado } from "../../context/interfaces/InterfazDelEstado";
+import { FUEL_LIST } from "../../constants/constants";
 
 export default function Result() {
   const { dataToShare, selectedOrderValue, loading } = useContext(GasoleoContext);
@@ -58,6 +59,10 @@ export default function Result() {
 
   }
 
+  const getPriceValue = (el: any) => {
+    return el[FUEL_LIST[Number(selectedOrderValue)]]
+  }
+
   if (loading)
     return (
       <section className="flex flex-col gap-3 justify-center items-center">
@@ -98,7 +103,9 @@ export default function Result() {
     .map((el: InterfazDelEstado, index) => {
       return (
         <>
-          <article className="rounded-md w-[250px] flex flex-col gap-3 bg-hp-white border-2 shadow-2xl p-5" key={index}>
+          <article className={index % 2 === 0 ? 'from-indigo-500 to-blue-200 rounded-md w-[250px] p-1 bg-gradient-to-r cursor-pointer' : 'from-blue-500 to-indigo-200 rounded-md w-[250px] p-1 bg-gradient-to-r cursor-pointer'} key={index}>
+            
+            <section className="flex flex-col gap-4 w-full h-full bg-white p-5 rounded-md">
             <header className="card-header flex flex-col gap-2 text-center items-center">
               <img src={getSrc(el['Rótulo'])} alt={el['Rótulo']} width={36} height={36} />
               <h4 className="font-bold">{el.Localidad}</h4>
@@ -107,7 +114,7 @@ export default function Result() {
 
               <div className="flex flex-col gap-2">
               <article className="flex gap-2 items-center">
-                <a target="_blank" rel="noreferrer" href={googleMapUrl(Number(el.Latitud.replace(",", ".")), Number(el['Longitud (WGS84)'].replace(",", ".")))} className="text-sm">{el.Dirección}</a>
+                <a target="_blank" rel="noreferrer" href={googleMapUrl(Number(el.Latitud.replace(",", ".")), Number(el['Longitud (WGS84)'].replace(",", ".")))} className="text-sm underline underline-offset-1 text-blue-600 hover:text-blue-800">{el.Dirección}</a>
               </article>
 
               <article className="flex gap-2 items-center">
@@ -118,32 +125,14 @@ export default function Result() {
                 <span className="text-sm">{el.Horario}</span>
               </article>
               </div>
-             
-
-              {selectedOrderValue === "0" ? (
+                     
                 <article className="flex flex-col justify-center gap-2 items-center">
-                  <h5 className="text-2xl">{el["Precio Gasoleo A"]}€</h5>
+                  <h5 className="text-2xl">{getPriceValue(el)}€</h5>
                 </article>
-              ) : null}
-
-              {selectedOrderValue === "1" ? (
-                <article className="flex flex-col justify-center gap-2 items-center">
-                  <h5 className="text-2xl">{el["Precio Gasoleo Premium"]}€</h5>
-                </article>
-              ) : null}
-
-              {selectedOrderValue === "2" ? (
-                <article className="flex flex-col justify-center gap-2 items-center">
-                  <h5 className="text-2xl">{el["Precio Gasolina 95 E5"]}€</h5>
-                </article>
-              ) : null}
-
-              {selectedOrderValue === "3" ? (
-                <article className="flex flex-col justify-center gap-2 items-center">
-                  <h5 className="text-2xl">{el["Precio Gasolina 95 E5 Premium"]}€</h5>
-                </article>
-              ) : null}
+              
             </section>
+            </section>
+           
           </article>
         </>
       );
