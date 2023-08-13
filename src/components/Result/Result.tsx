@@ -8,7 +8,7 @@ import { InterfazDelEstado } from "../../context/interfaces/InterfazDelEstado";
 import { FUEL_LIST } from "../../constants/constants";
 
 export default function Result() {
-  const { dataToShare, selectedOrderValue, loading } = useContext(GasoleoContext);
+  const { dataToShare, selectedOrderValue, loading, geolocation } = useContext(GasoleoContext);
 
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
@@ -68,7 +68,7 @@ export default function Result() {
       <section className="flex flex-col gap-3 justify-center items-center">
           <Skeleton width={60} height={24} count={1}></Skeleton>
           <Skeleton width={532} height={60} count={1}></Skeleton>
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-3">
             {[0,1,2,3,4,5,6,7,8].map(n => {
               return <Skeleton width={250} height={250} count={1}></Skeleton>
             })}
@@ -80,7 +80,7 @@ export default function Result() {
     <>
     <section className="flex flex-col gap-2 items-center flex-1">
       <section className="flex justify-content-between">
-        <h1>Total: {dataToShare ? dataToShare.length : ""}</h1>
+        <h1>Total {geolocation ? ' en tu zona:' : ':'} {dataToShare ? dataToShare.length : ""}</h1>
       </section>
     
 
@@ -113,6 +113,12 @@ export default function Result() {
             <section className="card-body flex h-full flex-col gap-2 justify-between items-center">
 
               <div className="flex flex-col gap-2">
+
+          {el.Distancia ? <article className="flex gap-2 items-center">
+                <h5>{el.Distancia} km.</h5>
+              </article> : ''}
+              
+
               <article className="flex gap-2 items-center">
                 <a target="_blank" rel="noreferrer" href={googleMapUrl(Number(el.Latitud.replace(",", ".")), Number(el['Longitud (WGS84)'].replace(",", ".")))} className="text-sm underline underline-offset-1 text-blue-600 hover:text-blue-800">{el.Dirección}</a>
               </article>

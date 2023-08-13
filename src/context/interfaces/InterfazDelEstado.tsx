@@ -1,4 +1,5 @@
 export interface InterfazDelEstado {
+    Distancia?: number
     "C.P.": string
     Dirección: string
     Horario: string

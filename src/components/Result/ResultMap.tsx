@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-redeclare */
 import { useContext, useEffect, useRef, useState } from "react";
 import { GasoleoContext } from "../../context/GasoleoContext";
 import "./Result.css";
-import maplibregl, { GeoJSONSource, ImageSource } from 'maplibre-gl'; // or "const maplibregl = require('maplibre-gl');"
-import Map, {Layer, MapRef, NavigationControl, Popup, Source} from 'react-map-gl';
+import maplibregl, { GeoJSONSource, ImageSource, Properties } from 'maplibre-gl'; // or "const maplibregl = require('maplibre-gl');"
+import Map, {Layer, LayerProps, MapRef, NavigationControl, Popup, Source} from 'react-map-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { clusterLayer, clusterCountLayer, unclusteredPointLayer } from "./map/layers";
 import { FeatureCollection } from "./map/featureCollection";
@@ -11,15 +12,29 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { useMediaQuery } from "react-responsive";
 
+import {point, circle} from '@turf/turf'
+
 export default function ResultMap() {
-  const { dataToShare, loading, selectedOrderValue } = useContext(GasoleoContext);
+  const { dataToShare, loading, selectedOrderValue, geolocation, coords } = useContext(GasoleoContext);
 
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
   const validRefs = ['CEPSA', 'REPSOL', 'SHELL',
   'BP', 'PLENOIL', 'TOTAL', 'GALP', 'ALCAMPO', 'PETROPRIX']
+
   const mapRef = useRef<MapRef>(null);
   const geojson: FeatureCollection = {
+    type: 'FeatureCollection',
+    crs: {
+      properties: {
+        name: "Data by Town"
+      },
+      type: "name",
+    },
+    features: []
+  }
+
+  const geojsonCircle: FeatureCollection = {
     type: 'FeatureCollection',
     crs: {
       properties: {
@@ -51,8 +66,23 @@ export default function ResultMap() {
       )
     })
 
+    if (geolocation && coords.latitude && coords.longitude) {
+      const center = [coords.longitude, coords.latitude];
+      const radius = 10;
+      const options: any = {steps: 50, units: 'kilometers', properties: {foo: 'bar'}};
+      const circlex = circle(center, radius, options);
+ 
+      const addToMap: any [] = [circlex]
+      geojsonCircle.features.push(addToMap[0])
+    } else {
+      geojsonCircle.features.length = 0;
+    }
 
-  }, [dataToShare, geojson.features, selectedOrderValue]);
+     
+
+
+
+  }, [dataToShare, geojson.features, geojsonCircle.features, selectedOrderValue, geolocation]);
 
   const getKeys = (ref:string) => {
 
@@ -64,6 +94,16 @@ export default function ResultMap() {
     return 'marca-blanca'
 
   }
+
+  const layerStyle: LayerProps = {
+    id: 'point',
+    type: 'fill',
+
+    paint: {
+      "fill-opacity": .3,
+    }
+    
+  };
 
 
   const onClick = (event: any) => {
@@ -159,8 +199,16 @@ export default function ResultMap() {
           <Layer {...clusterLayer} />
           <Layer {...clusterCountLayer} />
           <Layer {...unclusteredPointLayer} />
-         
 
+          </Source>
+
+          
+          <Source
+            id="circle"
+            type="geojson"
+            data={geojsonCircle}
+           >
+             <Layer {...layerStyle} />
           </Source>
 
         <NavigationControl position="top-left" />

@@ -10,7 +10,9 @@ export interface GasoleoStateInterface {
     selectedOrderValue: string,
     filteredTowns: [],
     loading: boolean,
+    geolocation: boolean,
     view: GasoleoViews,
+    coords: {latitude: number | null, longitude: number | null}
 }
 
 export const GasoleoState = (): GasoleoStateInterface => {
@@ -23,6 +25,8 @@ export const GasoleoState = (): GasoleoStateInterface => {
         selectedOrderValue: "0",
         filteredTowns: [],
         loading: false,
-        view: GasoleoViews.LIST
+        geolocation: false,
+        view: GasoleoViews.LIST,
+        coords: {latitude: null, longitude: null}
     }
 }

@@ -5,7 +5,7 @@ import { GasoleoViews } from "../../context/enums/GasoleoViews";
 
 export default function Form() {
 
-    const {findDataByProvince, findDataByTown, updateView , view,  filteredTowns, codTown, codProv} = useContext(GasoleoContext)
+    const {findDataByProvince, findDataByTown, updateView , view, geolocation, loading, filteredTowns, codTown, codProv} = useContext(GasoleoContext)
 
     const handleChangeProvince = (evt: { target: { value: string; }; }): void => {
         findDataByProvince(evt.target.value);
@@ -30,7 +30,8 @@ export default function Form() {
                 <article className="flex w-full">
                     <button className="w-full rounded-md p-3 bg-slate-400 text-white" onClick={handleLoadView}>{view === GasoleoViews.LIST ? 'Ver mapa' : 'Ver lista'}</button>
                 </article>
-                <form className="flex md:flex-col gap-3 justify-content-center align-items-center">
+
+                {!geolocation && !loading ?                 <form className="flex md:flex-col gap-3 justify-content-center align-items-center">
                     <select value={codProv} className="form-control w-full md:w-auto p-3" onChange={handleChangeProvince}>
                     <option value={'--'}>Provincia</option>
                       {provincias.map((prov, index) => {
@@ -52,7 +53,8 @@ export default function Form() {
                           )
                       })}
                     </select>
-                </form>
+                </form>: ''}
+
             </section>
         </>
     )

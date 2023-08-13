@@ -6,6 +6,7 @@ import { Actions } from "./enums/GasoleoActions";
 import { gasoleoReducer } from "./GasoleoReducer";
 import { GasoleoState } from "./interfaces/GasoleoState";
 import { GasoleoViews } from "./enums/GasoleoViews";
+import { InterfazDelEstado } from "./interfaces/InterfazDelEstado";
 
 export const GasoleoContext = createContext({
   ...GasoleoState(),
@@ -14,7 +15,9 @@ export const GasoleoContext = createContext({
   sortAndFilterData: (town: string): void => {},
   findBySpeechValue: (provStr: string, isCapital: boolean): void => {},
   updateView: (view: GasoleoViews): void => {},
-  toggleLoading: (loading: boolean): void => {}
+  toggleLoading: (loading: boolean): void => {},
+  toggleGeolocation: (geolocation: boolean, lat: number | null, long: number | null): void => {},
+  findDataByCoords: (coords: {latitude: number, longitude: number}): void => {}
 });
 
 export function GasoleoContextProvider(props: any) {
@@ -30,22 +33,44 @@ export function GasoleoContextProvider(props: any) {
     dispatch({ type: Actions.UPDATE_LOADING, payload: loading }); 
   }
 
-  const sortAndFilterData = (order: string, dataProp = null) => {
+
+  const toggleGeolocation = (geolocation: boolean, lat: number | null, long: number | null) => {
+    dispatch({ type: Actions.TOGGLE_GEOLOCATION, payload: geolocation }); 
+    dispatch({type: Actions.UPDATE_COORDS, payload: {latitude: lat, longitude: long}})
+  }
+
+  const sortAndFilterData = (order: string, dataProp: any = null) => {
 
     let jsonData = dataProp || state.data;
 
     if (dataProp) dispatch({ type: Actions.UPDATE_DATA, payload: dataProp });
 
-    dispatch({
-      type: Actions.UPDATE_DATA_TO_SHARE,
-      payload: jsonData
-        .filter((el: any) => el[FUEL_LIST[parseInt(order)]] !== "")
-        .sort((a: any[], b: any[]) => {
-          const number1 = parseFloat(a[FUEL_LIST[0] as any].replace(",", "."));
-          const number2 = parseFloat(b[FUEL_LIST[0] as any].replace(",", "."));
-          return number1 - number2;
-        }),
-    });
+    if (jsonData[0].Distancia) {
+
+      dispatch({
+        type: Actions.UPDATE_DATA_TO_SHARE,
+        payload: jsonData
+          .filter((el: any) => el[FUEL_LIST[parseInt(order)]] !== "")
+          .sort((a: any, b: any) => {
+            
+            return a['Distancia'] - b['Distancia'];
+          }),
+      });
+
+    } else {
+      dispatch({
+        type: Actions.UPDATE_DATA_TO_SHARE,
+        payload: jsonData
+          .filter((el: any) => el[FUEL_LIST[parseInt(order)]] !== "")
+          .sort((a: any[], b: any[]) => {
+            const number1 = parseFloat(a[FUEL_LIST[0] as any].replace(",", "."));
+            const number2 = parseFloat(b[FUEL_LIST[0] as any].replace(",", "."));
+            return number1 - number2;
+          }),
+      });
+    }
+
+
 
     dispatch({ type: Actions.UPDATE_ORDER_VALUE, payload: order });
     dispatch({ type: Actions.UPDATE_LOADING, payload: false });
@@ -93,6 +118,34 @@ export function GasoleoContextProvider(props: any) {
     });
   };
 
+  const findDataByCoords = (coords: {latitude: number, longitude: number}) => {
+      dispatch({ type: Actions.UPDATE_LOADING, payload: true });
+  
+      const path = ''
+  
+      fetch(
+        `https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres${path}`
+      ).then((result) => {
+        result.json().then((r) => {
+          const filteredAux = r.ListaEESSPrecio
+            .filter((data: InterfazDelEstado) => {
+              const lat = Number(data.Latitud.replace(",", "."));
+              const long =  Number(data["Longitud (WGS84)"].replace(",", "."))
+              return getKilometros(coords.latitude, coords.longitude, lat, long) < 10
+            })
+
+            const finallyData = filteredAux.map((data: any) => {
+              const lat = Number(data.Latitud.replace(",", "."));
+              const long =  Number(data["Longitud (WGS84)"].replace(",", "."))
+              data['Distancia'] = getKilometros(coords.latitude, coords.longitude, lat, long)
+              return data
+            })
+  
+          sortAndFilterData(state.selectedOrderValue, finallyData);
+        });
+      });
+  }
+
   const findBySpeechValue = (provStr: string, isCapital: boolean) => {
     const exactlyFind = localidades.find((d) => d.Municipio === provStr);
     if (exactlyFind) {
@@ -122,6 +175,17 @@ export function GasoleoContextProvider(props: any) {
       dispatch({type: Actions.UPDATE_VIEW, payload: view})
   }
 
+  const getKilometros = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+    const rad = function (x: number) { return x * Math.PI / 180; }
+    const R = 6378.137; //Radio de la tierra en km
+    const dLat = rad(lat2 - lat1);
+    const dLong = rad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c;
+    return parseFloat(d.toFixed(1)); //Retorna tres decimales
+  }
+
   return (
     <>
       <GasoleoContext.Provider
@@ -132,7 +196,9 @@ export function GasoleoContextProvider(props: any) {
           sortAndFilterData,
           findBySpeechValue,
           updateView,
-          toggleLoading
+          toggleLoading,
+          toggleGeolocation,
+          findDataByCoords
         }}
       >
         {props.children}

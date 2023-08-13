@@ -54,10 +54,25 @@ export const gasoleoReducer = (
       }
     }
 
+    case Actions.TOGGLE_GEOLOCATION: {
+      return {
+        ...state,
+        geolocation: action.payload
+      }
+    }
+
+
     case Actions.UPDATE_VIEW: {
       return {
         ...state,
         view: action.payload,
+      }
+    }
+
+    case Actions.UPDATE_COORDS: {
+      return {
+        ...state,
+        coords: {...action.payload}
       }
     }
 

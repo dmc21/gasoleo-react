@@ -7,7 +7,7 @@ import SpeechRecognition, {
 import "./Navbar.css";
 
 export default function Navbar() {
-  const { sortAndFilterData, findBySpeechValue, toggleLoading } = useContext(GasoleoContext);
+  const { sortAndFilterData, findBySpeechValue, toggleLoading, toggleGeolocation, findDataByCoords, geolocation, findDataByProvince, codProv } = useContext(GasoleoContext);
 
   const startListening = () =>
     SpeechRecognition.startListening({ continuous: true });
@@ -43,13 +43,6 @@ export default function Navbar() {
         findBySpeechValue(provincia, isCapital);
       },
     },
-
-    {
-      command: "Gasolineras baratas cerca de mi",
-      callback: () => {
-        // coger la ubicación
-      },
-    },
   ];
 
   const {
@@ -65,6 +58,24 @@ export default function Navbar() {
 
     setEnabledGasolineiThor((prev) => !prev);
   };
+
+  const toggleGeo = () => {
+    const geo = !geolocation
+
+    if (geo) {
+      navigator.geolocation.getCurrentPosition(info => {
+        const {latitude, longitude} = info.coords;
+        toggleGeolocation(geo, latitude, longitude)
+        findDataByCoords({latitude, longitude})
+      }, err => {
+        toggleGeolocation(false, null, null)
+      })
+    } else {
+      findDataByProvince(codProv);
+      toggleGeolocation(false, null, null)
+    }
+
+  }
 
   if (!browserSupportsSpeechRecognition) {
     return <span>Browser doesn't support speech recognition.</span>;
@@ -99,12 +110,14 @@ export default function Navbar() {
             );
           })}
         </select>
-        <section className="flex gap-1">
-          <button className="btn btn-success">
-            <i className="fa-solid fa-location-arrow"></i>
-          </button>
+        <section className="flex">
+          <button className=" rounded-full border border-black px-3 bg-slate-900" onClick={toggleGeo}>
+            
+            <i className={geolocation ? 'animate-bounce fa-solid fa-location-arrow text-green-500' : 'fa-solid fa-location-arrow text-green-200'}></i>  
+             </button>
         </section>
       </nav>
     </>
   );
 }
+
