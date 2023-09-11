@@ -6,6 +6,7 @@ import Result from "./components/Result/Result";
 import { GasoleoContext } from "./context/GasoleoContext";
 import { GasoleoViews } from "./context/enums/GasoleoViews";
 import ResultMap from "./components/Result/ResultMap";
+import { Analytics } from '@vercel/analytics/react';
 
 export function App() {
 
@@ -19,6 +20,7 @@ export function App() {
         <Form />
          {view === GasoleoViews.LIST ? <Result/> : <ResultMap/>}
       </section>
+      <Analytics/>
     </main>
   );
 }
