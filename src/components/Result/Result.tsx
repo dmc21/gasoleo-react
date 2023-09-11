@@ -103,16 +103,16 @@ export default function Result() {
     .map((el: InterfazDelEstado, index) => {
       return (
         <>
-          <article className={index % 2 === 0 ? 'from-indigo-500 to-blue-200 rounded-md w-[250px] p-1 bg-gradient-to-r cursor-pointer' : 'from-blue-500 to-indigo-200 rounded-md w-[250px] p-1 bg-gradient-to-r cursor-pointer'} key={index}>
+          <article className=" rounded-md border border-black w-[260px] md:w-[300px]" key={index}>
             
-            <section className="flex flex-col gap-4 w-full h-full bg-white p-5 rounded-md">
+            <section className="flex flex-col gap-4 w-full h-full bg-black/10 p-5 rounded-md">
             <header className="card-header flex flex-col gap-2 text-center items-center">
               <img src={getSrc(el['Rótulo'])} alt={el['Rótulo']} width={36} height={36} />
               <h4 className="font-bold">{el.Localidad}</h4>
             </header>
             <section className="card-body flex h-full flex-col gap-2 justify-between items-center">
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1 w-[190px] md:w-[250px] text-ellipsis overflow-hidden items-center whitespace-nowrap">
 
           {el.Distancia ? <article className="flex gap-2 items-center">
                 <h5>{el.Distancia} km.</h5>
@@ -120,7 +120,7 @@ export default function Result() {
               
 
               <article className="flex gap-2 items-center">
-                <a target="_blank" rel="noreferrer" href={googleMapUrl(Number(el.Latitud.replace(",", ".")), Number(el['Longitud (WGS84)'].replace(",", ".")))} className="text-sm underline underline-offset-1 text-blue-600 hover:text-blue-800">{el.Dirección}</a>
+                <a target="_blank" rel="noreferrer" href={googleMapUrl(Number(el.Latitud.replace(",", ".")), Number(el['Longitud (WGS84)'].replace(",", ".")))} className="text-sm underline underline-offset-1 text-blue-600 hover:text-blue-800 w-[190px] md:w-[250px] text-ellipsis overflow-hidden justify-center text-center whitespace-nowrap">{el.Dirección}</a>
               </article>
 
               <article className="flex gap-2 items-center">
@@ -131,9 +131,11 @@ export default function Result() {
                 <span className="text-sm">{el.Horario}</span>
               </article>
               </div>
+
+              <hr />
                      
                 <article className="flex flex-col justify-center gap-2 items-center">
-                  <h5 className="text-2xl">{getPriceValue(el)}€</h5>
+                  <h5 className="text-2xl font-bold">{getPriceValue(el)}€</h5>
                 </article>
               
             </section>
